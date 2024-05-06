@@ -1,4 +1,5 @@
 import { createElement } from "./elements";
+import { format, compareAsc } from "date-fns";
 
 class Task {
     constructor(title, notes, dueDate, priority, project) {
@@ -20,18 +21,19 @@ export function createTask(title, notes, dueDate, priority, project) {
 }
 
 export const getTasks = (function() {
-    //this is obviously too precise - see also dummydata
-    const today = new Date();
+    const todaysDateFormatted = format(new Date(), "yyyy-mm-dd");
 
     const all = () => tasks;
-    const filterByToday = () => tasks.filter(task => task.dueDate === today);
-    const filterByOverdue = () => tasks.filter(task => task.dueDate < today);
+    const filterByToday = () => tasks.filter(task => format(task.dueDate, "yyyy-mm-dd") == todaysDateFormatted);
+    const filterByOverdue = () => tasks.filter(task => format(task.dueDate, "yyyy-mm-dd") < todaysDateFormatted);
     const filterByProject = (project) => tasks.filter(task => task.project === project);
 
     return { all, filterByToday, filterByOverdue, filterByProject };
 })();
 
-export function renderTasks(tasksArray) {
+export function renderTasks(tasksArray, heading) {
+    const h2 = document.querySelector("h2");
+    h2.textContent = heading;
     for (let i = 0; i < tasksArray.length; i++) {
         const taskTitle = createElement.text(tasksArray[i].title);
         tasksContainer.appendChild(taskTitle);

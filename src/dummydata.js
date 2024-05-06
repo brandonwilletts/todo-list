@@ -6,43 +6,40 @@ export function createDummyData() {
     const projectSchool = createProject("School");
     const projectPersonal = createProject("Personal");
     const projectOther = createProject("Other");
-
-    //this is obviously too precise
-    //this also changes the date each time it's rendered
-    const date = new Date();
     
     const taskOne = createTask(
         "Finish TPS report",
         "Submit to both Bobs",
-        date,
+        new Date(),
         "High",
         projectWork
     );
+
     const taskTwo = createTask(
         "Study for mid-term",
         "Make sure to review Chapters 4 and 5",
-        date,
+        new Date(2024, 12, 31),
         "Medium",
         projectSchool
     );
     const taskThree = createTask(
         "Buy groceries",
         "Milk, bread, cheese, eggs",
-        date,
+        new Date(2024, 3, 15),
         "Low",
         projectPersonal
     );
     const taskFour = createTask(
         "Get car serviced",
         "Fairview Auto",
-        date,
+        new Date(),
         "Medium",
         projectOther
     );
     const taskFive = createTask(
         "See if Inception is playing",
         "Invite Steve",
-        date,
+        new Date(),
         "Low"
     );
 };
