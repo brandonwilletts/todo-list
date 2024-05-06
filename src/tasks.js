@@ -11,6 +11,7 @@ class Task {
 }
 
 let tasks = [];
+const tasksContainer = document.querySelector("#tasks");
 
 export function createTask(title, notes, dueDate, priority, project) {
     const task = new Task (title, notes, dueDate, priority, project);
@@ -19,17 +20,24 @@ export function createTask(title, notes, dueDate, priority, project) {
 }
 
 export const getTasks = (function() {
+    //this is obviously too precise - see also dummydata
+    const today = new Date();
+
     const all = () => tasks;
-    const today = () => tasks;
-    const overdue = () => tasks;
-    const project = (project) => tasks;
-    return { all, today, overdue, project };
+    const filterByToday = () => tasks.filter(task => task.dueDate === today);
+    const filterByOverdue = () => tasks.filter(task => task.dueDate < today);
+    const filterByProject = (project) => tasks.filter(task => task.project === project);
+
+    return { all, filterByToday, filterByOverdue, filterByProject };
 })();
 
 export function renderTasks(tasksArray) {
-    const tasksContainer = document.querySelector("#tasks");
     for (let i = 0; i < tasksArray.length; i++) {
         const taskTitle = createElement.text(tasksArray[i].title);
         tasksContainer.appendChild(taskTitle);
     };
-}
+};
+
+export function clearTasks() {
+    tasksContainer.textContent = "";
+};

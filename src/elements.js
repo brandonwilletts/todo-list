@@ -8,7 +8,8 @@ export const createElement = (function() {
 
     function projectButton(project) {
         const button = document.createElement("button");
-        button.classList.add("btn-sidebar");
+        button.classList.add("btn-sidebar", "btn-project");
+        button.setAttribute("data-key", project.key);
 
         const icon = document.createElement("span");
         icon.classList.add("material-symbols-outlined", "md-18");
@@ -21,7 +22,7 @@ export const createElement = (function() {
         button.appendChild(text);
 
         return button
-    }
+    };
 
     return {
         text,

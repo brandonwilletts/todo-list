@@ -7,6 +7,8 @@ export function createDummyData() {
     const projectPersonal = createProject("Personal");
     const projectOther = createProject("Other");
 
+    //this is obviously too precise
+    //this also changes the date each time it's rendered
     const date = new Date();
     
     const taskOne = createTask(
