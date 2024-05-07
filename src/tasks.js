@@ -8,11 +8,11 @@ class Task {
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = project;
+        this.complete = false;
     }
 }
 
 let tasks = [];
-const tasksContainer = document.querySelector("#tasks");
 
 export function createTask(title, notes, dueDate, priority, project) {
     const task = new Task (title, notes, dueDate, priority, project);
@@ -30,16 +30,3 @@ export const getTasks = (function() {
 
     return { all, filterByToday, filterByOverdue, filterByProject };
 })();
-
-export function renderTasks(tasksArray, heading) {
-    const h2 = document.querySelector("h2");
-    h2.textContent = heading;
-    for (let i = 0; i < tasksArray.length; i++) {
-        const taskTitle = createElement.text(tasksArray[i].title);
-        tasksContainer.appendChild(taskTitle);
-    };
-};
-
-export function clearTasks() {
-    tasksContainer.textContent = "";
-};

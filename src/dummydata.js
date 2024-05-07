@@ -39,7 +39,6 @@ export function createDummyData() {
     const taskFive = createTask(
         "See if Inception is playing",
         "Invite Steve",
-        new Date(),
-        "Low"
+        new Date()
     );
 };

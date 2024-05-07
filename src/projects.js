@@ -8,7 +8,6 @@ class Project {
 }
 
 let projects = [];
-const projectButtonsContainer = document.querySelector("#projects");
 
 export function createProject(name) {
     const project = new Project(name);
@@ -20,9 +19,3 @@ export function getProjects() {
     return projects
 }
 
-export function renderProjectButtons() {
-    for (let i = 0; i < projects.length; i++) {
-        const button = createElement.projectButton(projects[i]);
-        projectButtonsContainer.appendChild(button);
-    };
-};

@@ -5,14 +5,27 @@
     --sidebar-bgcolor: #fbfaf6;
     --main-bgcolor: white;
     --red: #dd4b40;
+    --red-trans: rgb(221, 75, 64, 0.2);
+    --red-trans-hover: rgb(221, 75, 64, 0.4);
+    --orange: rgb(232, 101, 0);
+    --orange-trans: rgb(232, 101, 0, 0.2);
+    --orange-trans-hover: rgb(232, 101, 0, 0.4);
+    --green: rgb(0, 157, 34);
+    --green-trans: rgb(0, 157, 34, 0.2);
+    --green-trans-hover: rgb(0, 157, 34, 0.4);
+    --light-grey: lightgrey;
+    --grey: grey;
     --text: #111111;
     --icon: #454545;
+    --charcoal: #454545;
+    --charcoal-trans: rgb(149, 149, 149, 0.2);
+    --charcoal-trans-hover: rgb(149, 149, 149, 0.4);
     --btn-sidebar-hover: rgb(248,233,227, 0.4);
     --btn-sidebar-focus: rgb(248,233,227, 1);
 }
 
 .material-symbols-outlined {
-    color: var(--icon)
+    color: var(--icon);
 }
 
 .material-symbols-outlined.md-18 {
@@ -165,4 +178,105 @@ body {
     flex-direction: column;
     gap: 32px;
     width: clamp(200px, 100%, 768px);
+}
+
+.div-task {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 24px 0;
+    gap: 16px;
+    border-top: 1px solid var(--light-grey);
+}
+
+.div-task p {
+    font-size: 10pt;
+    padding: 8px 0;
+}
+
+.div-task span {
+    font-size: 9pt;
+}
+
+.red-text {
+    color: var(--red);
+}
+
+.div-task span .material-symbols-outlined {
+    color: var(--grey);
+}
+
+.btn-priority {
+    aspect-ratio: 1;
+    width: 18px;
+    border: 1.5px solid;
+    border-radius: 100%;
+}
+
+.btn-priority:hover {
+    border: 2px solid;
+    cursor: pointer;
+}
+
+.priority-high {
+    color: var(--red);
+    background-color: var(--red-trans);
+}
+
+.priority-high:hover {
+    background-color: var(--red-trans-hover);
+}
+
+.priority-medium {
+    color: var(--orange);
+    background-color: var(--orange-trans);
+}
+
+.priority-medium:hover {
+    background-color: var(--orange-trans-hover);
+}
+
+.priority-low {
+    color: var(--green);
+    background-color: var(--green-trans);
+}
+
+.priority-low:hover {
+    background-color: var(--green-trans-hover);
+}
+
+.priority-none {
+    color: var(--charcoal);
+    background-color: var(--charcoal-trans);
+}
+
+.priority-none:hover {
+    background-color: var(--charcoal-trans-hover);
+}
+
+.task-title {
+    font-size: 12pt;
+}
+
+.project-link {
+    background-color: var(--main-bgcolor);
+    padding: 0;
+    border: none;
+    font-size: 10pt;
+    color: var(--red);
+}
+
+.project-link:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.div-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.span-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
