@@ -30,7 +30,9 @@ export const createElement = (function() {
         const taskContainer = document.createElement("div");
         taskContainer.classList.add("div-task");
 
-        const priorityButton = document.createElement("button");
+        const priorityButton = document.createElement("span");
+        priorityButton.classList.add("material-symbols-outlined", "md-18");
+
         priorityButton.classList.add("btn-priority");
         switch(task.priority) {
             case "High":

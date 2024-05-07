@@ -39,6 +39,23 @@ function renderTasks(tasksArray, heading) {
         };
     };
 
+    function addEventListenersToPriorityButtons() {
+        const priorityButtons = document.querySelectorAll(".btn-priority");
+        const taskTitle = document.querySelectorAll("h3");
+
+        for (let i = 0; i < priorityButtons.length; i++) {
+            priorityButtons[i].addEventListener("click", function(){
+                if(priorityButtons[i].textContent == "") {
+                    taskTitle[i].style.cssText = "text-decoration: line-through;";
+                    priorityButtons[i].textContent = "close";
+                } else {
+                    taskTitle[i].style.cssText = "text-decoration: none;";
+                    priorityButtons[i].textContent = "";
+                }
+            });
+        };
+    };
+
     clearTasks();
 
     const h2 = document.querySelector("h2");
@@ -50,6 +67,7 @@ function renderTasks(tasksArray, heading) {
     };
 
     addEventListenersToProjectLinks();
+    addEventListenersToPriorityButtons();
 };
 
 function sidebarNav() {

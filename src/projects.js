@@ -18,4 +18,3 @@ export function createProject(name) {
 export function getProjects() {
     return projects
 }
-
