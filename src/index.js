@@ -2,7 +2,7 @@ import "./style.css";
 import { format, compareAsc } from "date-fns";
 import { createTask, getTasks } from "./tasks";
 import { createDummyData } from "./dummydata";
-import { getProjects } from "./projects";
+import { createProject, getProjects } from "./projects";
 import { createElement } from "./elements";
 
 let visibleTasks = []; 
@@ -14,20 +14,41 @@ function initializePage() {
     renderTasks();
     renderProjectButtons();
     sidebarNav();
-}
+};
 
 function setVisibleTasks(tasksArray, headingString) {
     visibleTasks = tasksArray;
     heading = headingString;
-}
+};
 
 function renderProjectButtons() {
     const projectButtonsContainer = document.querySelector("#projects");
+    
+    function clearProjectButtons() {
+        projectButtonsContainer.textContent = "";
+    }
+    
+    function addEventListenersToProjectButtons() {
+        const projectButtons = document.querySelectorAll(".btn-project");
+        
+        for (let i = 0; i < projectButtons.length; i++) {
+            const project = getProjects().find(item => item.key == projectButtons[i].dataset.key);
+            projectButtons[i].addEventListener("click", function() {
+                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
+                renderTasks();
+            });
+        };
+    };
+
+    clearProjectButtons();
+    
     const projects = getProjects();
     for (let i = 0; i < projects.length; i++) {
         const button = createElement.projectButton(projects[i]);
         projectButtonsContainer.appendChild(button);
     };
+
+    addEventListenersToProjectButtons();
 };
 
 function renderTasks() {
@@ -83,6 +104,33 @@ function renderTasks() {
 };
 
 function sidebarNav() {
+    const dialog = document.querySelector("dialog");
+    
+    const addProjectButton = document.querySelector("#add-project");
+    addProjectButton.addEventListener("click", function() {
+        const form = createElement.addProjectForm();
+        dialog.textContent = "";
+        dialog.appendChild(form);
+        
+        const cancelButton = document.querySelector("#cancel");
+        cancelButton.addEventListener("click", () => dialog.close());
+
+        const addProjectForm = document.querySelector("#add-project-form");
+        addProjectForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const newProject = createProject(projectName.value);
+            renderProjectButtons();
+            dialog.close();
+        })
+
+        dialog.showModal();
+    });
+
+    const addTaskButton = document.querySelector("#add-task");
+    addTaskButton.addEventListener("click", function() {
+        dialog.showModal();
+    });
+    
     const allTasksButton = document.querySelector("#all-tasks");
     allTasksButton.addEventListener("click", function() {
         setVisibleTasks(getTasks.all(), "All Tasks");
@@ -101,19 +149,6 @@ function sidebarNav() {
         renderTasks();
     });
 
-    function addEventListenersToProjectButtons() {
-        const projectButtons = document.querySelectorAll(".btn-project");
-        
-        for (let i = 0; i < projectButtons.length; i++) {
-            const project = getProjects().find(item => item.key == projectButtons[i].dataset.key);
-            projectButtons[i].addEventListener("click", function() {
-                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
-                renderTasks();
-            });
-        };
-    };
-
-    addEventListenersToProjectButtons();
 }
 
 initializePage();

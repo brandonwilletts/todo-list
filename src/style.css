@@ -5,6 +5,7 @@
     --sidebar-bgcolor: #fbfaf6;
     --main-bgcolor: white;
     --red: #dd4b40;
+    --darkred: #c04037;
     --red-trans: rgb(221, 75, 64, 0.2);
     --red-trans-hover: rgb(221, 75, 64, 0.4);
     --orange: rgb(232, 101, 0);
@@ -22,6 +23,8 @@
     --charcoal-trans-hover: rgb(149, 149, 149, 0.4);
     --btn-sidebar-hover: rgb(248,233,227, 0.4);
     --btn-sidebar-focus: rgb(248,233,227, 1);
+    --grey: #ebebeb;
+    --darkgrey: #e0e0e0;
 }
 
 .material-symbols-outlined {
@@ -278,4 +281,81 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+/* New Project Modal */
+
+dialog {
+    padding: 32px;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    min-width: 320px;
+}
+
+dialog h2 {
+    text-align: center;
+}
+
+dialog label {
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+dialog[open]::backdrop {
+    background-color: rgb(0 0 0 / 50%);
+}
+
+form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+form > div:last-child {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+}
+
+form > div:last-child button {
+    width: 50%;
+}
+
+input {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+    min-width: 300px;
+}
+
+.btn-red {
+    color: white;
+    background-color: var(--red);
+    font-weight: 600;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+}
+
+.btn-red:hover {
+    background-color: var(--darkred);
+    cursor: pointer;
+}
+
+.btn-grey {
+    background-color: var(--grey);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+}
+
+.btn-grey:hover {
+    background-color: var(--darkgrey);
+    cursor: pointer;
 }

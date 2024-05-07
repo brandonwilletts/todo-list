@@ -8,6 +8,42 @@ export const createElement = (function() {
         return textElement
     };
 
+    function formSaveButton() {
+        const saveButton = document.createElement("button");
+        saveButton.classList.add("btn-red");
+        saveButton.setAttribute("type", "submit");
+        saveButton.textContent = "Save";
+        
+        return saveButton
+    };
+
+    function formCancelButton() {
+        const cancelButton = document.createElement("button");
+        cancelButton.classList.add("btn-grey");
+        cancelButton.setAttribute("id", "cancel");
+        cancelButton.setAttribute("type", "button");
+        cancelButton.textContent = "Cancel";
+
+        return cancelButton
+    };
+
+    function inputLabel(forText, labelText) {
+        const label = document.createElement("label");
+        label.setAttribute("for", forText);
+        label.textContent = labelText;
+
+        return label
+    };
+
+    function inputText(nameAndIdText) {
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("name", nameAndIdText);
+        input.setAttribute("id", nameAndIdText);
+    
+        return input
+    };
+
     function projectButton(project) {
         const button = document.createElement("button");
         button.classList.add("btn-sidebar", "btn-project");
@@ -103,9 +139,40 @@ export const createElement = (function() {
         return taskContainer
     }
 
+    function addProjectForm() {
+        const form = document.createElement("form");
+        form.setAttribute("id", "add-project-form");
+
+        const h2 = document.createElement("h2");
+        h2.textContent = "Add Project";
+        form.appendChild(h2);
+
+        const inputDiv = document.createElement("div");
+        form.appendChild(inputDiv);
+
+            const label = inputLabel("projectName", "Name");
+            inputDiv.appendChild(label);
+
+            const input = inputText("projectName");
+            input.setAttribute("required", true);
+            inputDiv.appendChild(input);
+
+        const buttonsDiv = document.createElement("div");
+        form.appendChild(buttonsDiv);
+
+            const cancelButton = formCancelButton();
+            buttonsDiv.appendChild(cancelButton);
+
+            const saveButton = formSaveButton();
+            buttonsDiv.appendChild(saveButton);
+
+        return form
+    }
+
     return {
         text,
         projectButton,
-        taskDisplay
+        taskDisplay,
+        addProjectForm
     };    
 })();
