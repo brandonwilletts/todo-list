@@ -12,7 +12,8 @@ export function createDummyData() {
         "Submit to both Bobs",
         new Date(),
         "High",
-        projectWork
+        projectWork,
+        true
     );
 
     const taskTwo = createTask(
@@ -34,7 +35,8 @@ export function createDummyData() {
         "Fairview Auto",
         new Date(),
         "Medium",
-        projectOther
+        projectOther,
+        true
     );
     const taskFive = createTask(
         "See if Inception is playing",

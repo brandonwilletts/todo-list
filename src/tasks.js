@@ -2,20 +2,20 @@ import { createElement } from "./elements";
 import { format, compareAsc } from "date-fns";
 
 class Task {
-    constructor(title, notes, dueDate, priority, project) {
+    constructor(title, notes, dueDate, priority, project, complete = false) {
         this.title = title;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = project;
-        this.complete = false;
+        this.complete = complete;
     }
 }
 
 let tasks = [];
 
-export function createTask(title, notes, dueDate, priority, project) {
-    const task = new Task (title, notes, dueDate, priority, project);
+export function createTask(title, notes, dueDate, priority, project, complete) {
+    const task = new Task (title, notes, dueDate, priority, project, complete);
     tasks.push(task);
     return task
 }

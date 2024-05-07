@@ -5,11 +5,20 @@ import { createDummyData } from "./dummydata";
 import { getProjects } from "./projects";
 import { createElement } from "./elements";
 
+let visibleTasks = []; 
+let heading = "";
+
 function initializePage() {
     createDummyData();
-    renderTasks(getTasks.all(), "All Tasks");
+    setVisibleTasks(getTasks.all(), "All Tasks");
+    renderTasks();
     renderProjectButtons();
     sidebarNav();
+}
+
+function setVisibleTasks(tasksArray, headingString) {
+    visibleTasks = tasksArray;
+    heading = headingString;
 }
 
 function renderProjectButtons() {
@@ -21,7 +30,7 @@ function renderProjectButtons() {
     };
 };
 
-function renderTasks(tasksArray, heading) {
+function renderTasks() {
     const tasksContainer = document.querySelector("#tasks");
 
     function clearTasks() {
@@ -34,7 +43,8 @@ function renderTasks(tasksArray, heading) {
         for (let i = 0; i < projectLinks.length; i++) {
             const project = getProjects().find(item => item.key == projectLinks[i].dataset.key);
             projectLinks[i].addEventListener("click", function() {
-                renderTasks(getTasks.filterByProject(project), `${project.name}`);
+                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
+                renderTasks();
             });
         };
     };
@@ -45,12 +55,14 @@ function renderTasks(tasksArray, heading) {
 
         for (let i = 0; i < priorityButtons.length; i++) {
             priorityButtons[i].addEventListener("click", function(){
-                if(priorityButtons[i].textContent == "") {
-                    taskTitle[i].style.cssText = "text-decoration: line-through;";
-                    priorityButtons[i].textContent = "close";
+                const projectKey = priorityButtons[i].parentNode.dataset.key;
+                const task = getTasks.all().find(item => item.project.key == projectKey);
+                if(!task.complete) {
+                    task.complete = true;
+                    renderTasks();
                 } else {
-                    taskTitle[i].style.cssText = "text-decoration: none;";
-                    priorityButtons[i].textContent = "";
+                    task.complete = false;
+                    renderTasks();
                 }
             });
         };
@@ -59,10 +71,10 @@ function renderTasks(tasksArray, heading) {
     clearTasks();
 
     const h2 = document.querySelector("h2");
-    h2.textContent = `${heading} (${tasksArray.length})`;
+    h2.textContent = `${heading} (${visibleTasks.length})`;
 
-    for (let i = 0; i < tasksArray.length; i++) {
-        const task = createElement.taskDisplay(tasksArray[i]);
+    for (let i = 0; i < visibleTasks.length; i++) {
+        const task = createElement.taskDisplay(visibleTasks[i]);
         tasksContainer.appendChild(task);
     };
 
@@ -73,17 +85,20 @@ function renderTasks(tasksArray, heading) {
 function sidebarNav() {
     const allTasksButton = document.querySelector("#all-tasks");
     allTasksButton.addEventListener("click", function() {
-        renderTasks(getTasks.all(), "All Tasks");
+        setVisibleTasks(getTasks.all(), "All Tasks");
+        renderTasks();
     });
 
     const todayButton = document.querySelector("#today");
     todayButton.addEventListener("click", function() {
-        renderTasks(getTasks.filterByToday(), "Today");
+        setVisibleTasks(getTasks.filterByToday(), "Today");
+        renderTasks();
     });
 
     const overdueButton = document.querySelector("#overdue");
     overdueButton.addEventListener("click", function() {
-        renderTasks(getTasks.filterByOverdue(), "Overdue");
+        setVisibleTasks(getTasks.filterByOverdue(), "Overdue");
+        renderTasks();
     });
 
     function addEventListenersToProjectButtons() {
@@ -92,7 +107,8 @@ function sidebarNav() {
         for (let i = 0; i < projectButtons.length; i++) {
             const project = getProjects().find(item => item.key == projectButtons[i].dataset.key);
             projectButtons[i].addEventListener("click", function() {
-                renderTasks(getTasks.filterByProject(project), `${project.name}`);
+                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
+                renderTasks();
             });
         };
     };

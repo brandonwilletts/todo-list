@@ -29,11 +29,16 @@ export const createElement = (function() {
     function taskDisplay(task) {
         const taskContainer = document.createElement("div");
         taskContainer.classList.add("div-task");
+        task.project ? taskContainer.setAttribute("data-key", task.project.key) : null;
 
         const priorityButton = document.createElement("span");
         priorityButton.classList.add("material-symbols-outlined", "md-18");
-
         priorityButton.classList.add("btn-priority");
+        if (task.complete === true) {
+            priorityButton.textContent = "close";
+        } else {
+            priorityButton.textContent = "";
+        }
         switch(task.priority) {
             case "High":
                 priorityButton.classList.add("priority-high");
@@ -57,6 +62,7 @@ export const createElement = (function() {
         const taskTitle = document.createElement("h3");
         taskTitle.classList.add("task-title")
         taskTitle.textContent = task.title;
+        task.complete ? taskTitle.style.cssText = "text-decoration: line-through;" : null;
         taskInfo.appendChild(taskTitle);
 
         const taskNotes = document.createElement("p");
