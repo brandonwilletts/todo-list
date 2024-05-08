@@ -23,11 +23,11 @@ export function createTask(title, notes, dueDate, priority, projectKey) {
 }
 
 export const getTasks = (function() {
-    const todaysDateFormatted = format(new Date(), "yyyy-mm-dd");
+    const todaysDateFormatted = format(new Date(), "yyyy-MM-dd");
 
     const all = () => tasks;
-    const filterByToday = () => tasks.filter(task => format(task.dueDate, "yyyy-mm-dd") == todaysDateFormatted);
-    const filterByOverdue = () => tasks.filter(task => format(task.dueDate, "yyyy-mm-dd") < todaysDateFormatted);
+    const filterByToday = () => tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") == todaysDateFormatted);
+    const filterByOverdue = () => tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") < todaysDateFormatted);
     const filterByProject = (project) => tasks.filter(task => task.project === project);
 
     return { all, filterByToday, filterByOverdue, filterByProject };

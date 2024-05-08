@@ -119,7 +119,7 @@ export const createElement = (function() {
 
         const dueDate = document.createElement("span");
         dueDate.classList.add("red-text");
-        dueDate.textContent = `${format(task.dueDate, "yyyy-mm-dd")}`;
+        dueDate.textContent = format(task.dueDate, "yyyy-MM-dd");
         span.appendChild(dueDate);
 
         if(task.project) {
@@ -187,7 +187,7 @@ export const createElement = (function() {
         return form
     };
 
-    function addTaskForm() {
+    function addTaskForm(taskToEdit) {
         const form = document.createElement("form");
         form.setAttribute("id", "add-task-form");
 
@@ -262,6 +262,15 @@ export const createElement = (function() {
 
             const saveButton = formSaveButton();
             buttonsDiv.appendChild(saveButton);
+        
+        if(taskToEdit) {
+            h2.textContent = "Edit Task";
+            inputTitle.value = taskToEdit.title;
+            inputNotes.value = taskToEdit.notes;
+            inputDueDate.value = format(taskToEdit.dueDate, "yyyy-MM-dd");
+            inputPriority.value = taskToEdit.priority;
+            inputProject.value = taskToEdit.project.key;
+        }
 
         return form
     };

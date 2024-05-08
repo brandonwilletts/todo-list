@@ -58,7 +58,7 @@ function renderTasks() {
         tasksContainer.textContent = "";
     };
     
-    function addEventListenerToTaskDeleteButtons() {
+    function addEventListenersToTaskDeleteButtons() {
         const deleteTaskButtons = document.querySelectorAll(".btn-delete-task");
         for (let i = 0; i < deleteTaskButtons.length; i++) {
             const taskKey = deleteTaskButtons[i].dataset.key;
@@ -70,6 +70,17 @@ function renderTasks() {
             });
         };
     };
+
+    function addEventListenersToTaskEditButtons() {
+        const editTaskButtons = document.querySelectorAll(".btn-edit-task");
+        for (let i = 0; i < editTaskButtons.length; i++) {
+            const taskKey = editTaskButtons[i].dataset.key;
+            const task = getTasks.all().find(item => item.key == taskKey);
+            editTaskButtons[i].addEventListener("click", function() {
+                renderAddTaskFormModal(task);
+            });
+        };
+    }
 
     function addEventListenersToProjectLinks() {
         const projectLinks = document.querySelectorAll(".project-link");
@@ -111,9 +122,10 @@ function renderTasks() {
         tasksContainer.appendChild(task);
     };
 
-    addEventListenerToTaskDeleteButtons();
+    addEventListenersToTaskDeleteButtons();
     addEventListenersToProjectLinks();
     addEventListenersToPriorityButtons();
+    addEventListenersToTaskEditButtons();
 };
 
 function renderAddProjectFormModal() {
@@ -139,10 +151,10 @@ function renderAddProjectFormModal() {
     dialog.showModal();
 };
 
-function renderAddTaskFormModal() {
+function renderAddTaskFormModal(taskToEdit) {
     const dialog = document.querySelector("dialog");
 
-    const form = createElement.addTaskForm();
+    const form = createElement.addTaskForm(taskToEdit);
     dialog.textContent = "";
     dialog.appendChild(form);
     
@@ -152,8 +164,17 @@ function renderAddTaskFormModal() {
     const addProjectForm = document.querySelector("#add-task-form");
     addProjectForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        const newTask = createTask(taskTitle.value, taskNotes.value, new Date(taskDueDate.value), taskPriority.value, taskProject.value);
-        newTask.project ? setVisibleTasks(getTasks.filterByProject(newTask.project), `${newTask.project.name}`) : null;
+        if(taskToEdit) {
+            taskToEdit.title = taskTitle.value;
+            taskToEdit.notes = taskNotes.value;
+            taskToEdit.dueDate = taskDueDate.value;
+            taskToEdit.priority = taskPriority.value;
+            taskToEdit.project = getProjects().find(project => project.key == taskProject.value);
+            console.table(taskToEdit);
+        } else {
+            const newTask = createTask(taskTitle.value, taskNotes.value, taskDueDate.value, taskPriority.value, taskProject.value);
+            newTask.project ? setVisibleTasks(getTasks.filterByProject(newTask.project), `${newTask.project.name}`) : null;
+        }
         renderTasks();
         dialog.close();
     });
