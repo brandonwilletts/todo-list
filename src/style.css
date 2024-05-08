@@ -154,6 +154,11 @@ body {
     cursor: pointer;
 }
 
+.btn-sidebar div {
+    width: 100%;
+    text-align: left;
+}
+
 .btn-sidebar:focus {
     background-color: var(--btn-sidebar-focus);
     color: var(--red);
@@ -161,6 +166,19 @@ body {
 
 .btn-sidebar:focus .material-symbols-outlined {
     color: var(--red);
+}
+
+.btn-sidebar:hover .btn-delete-project {
+    display: inline-block;
+}
+
+.btn-delete-project {
+    color: var(--red);
+    display: none;
+}
+
+.btn-delete-project:hover {
+    color: var(--darkred);
 }
 
 .sidebar-footer {

@@ -40,6 +40,26 @@ function renderProjectButtons() {
         };
     };
 
+    function addEventListenersToProjectDeleteButtons(){
+        const deleteProjectButtons = document.querySelectorAll(".btn-delete-project");
+        
+        for (let i = 0; i < deleteProjectButtons.length; i++) {
+            const projectKey = deleteProjectButtons[i].parentNode.dataset.key;
+            const project = getProjects().find(item => item.key == projectKey);
+            const tasks = getTasks.filterByProject(project);
+
+            deleteProjectButtons[i].addEventListener("click", function() {
+                const projectIndex = getProjects().indexOf(project);
+                getProjects().splice(projectIndex, 1);
+                for(let i = 0; i < tasks.length; i++) {
+                    const index = getTasks.all().indexOf(tasks[i]);
+                    getTasks.all().splice(index, 1);
+                }
+                renderProjectButtons();
+            });
+        };
+    };    
+
     clearProjectButtons();
     
     const projects = getProjects();
@@ -49,6 +69,7 @@ function renderProjectButtons() {
     };
 
     addEventListenersToProjectButtons();
+    addEventListenersToProjectDeleteButtons();
 };
 
 function renderTasks() {
@@ -182,8 +203,7 @@ function renderAddTaskFormModal(taskToEdit) {
     dialog.showModal();
 };
 
-function sidebarNav() {
-  
+function sidebarNav() {  
     const addProject = document.querySelector("#add-project");
     addProject.addEventListener("click", function() {
         renderAddProjectFormModal();

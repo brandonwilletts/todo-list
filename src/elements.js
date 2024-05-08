@@ -58,8 +58,13 @@ export const createElement = (function() {
         const text = document.createElement("div");
         text.textContent = project.name;
 
+        const deleteButton = document.createElement("span");
+        deleteButton.classList.add("material-symbols-outlined", "md-18", "btn-delete-project");
+        deleteButton.textContent = "delete"
+
         button.appendChild(icon);
         button.appendChild(text);
+        button.appendChild(deleteButton);
 
         return button
     };
