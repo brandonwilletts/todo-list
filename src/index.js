@@ -64,14 +64,12 @@ function renderTasks() {
             const taskKey = deleteTaskButtons[i].dataset.key;
             const task = getTasks.all().find(item => item.key == taskKey);
             deleteTaskButtons[i].addEventListener("click", function() {
-                
                 const index = getTasks.all().indexOf(task);
                 getTasks.all().splice(index, 1);
                 renderTasks();
             });
-            
         };
-    }
+    };
 
     function addEventListenersToProjectLinks() {
         const projectLinks = document.querySelectorAll(".project-link");
@@ -190,6 +188,13 @@ function sidebarNav() {
     const overdueButton = document.querySelector("#overdue");
     overdueButton.addEventListener("click", function() {
         setVisibleTasks(getTasks.filterByOverdue(), "Overdue");
+        renderTasks();
+    });
+
+    const resetDemoDataButton = document.querySelector("#reset-demo-data");
+    resetDemoDataButton.addEventListener("click", function() {
+        getTasks.all().splice(0, getTasks.all().length);
+        createDummyData();
         renderTasks();
     });
 }
