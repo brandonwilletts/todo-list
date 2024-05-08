@@ -194,7 +194,10 @@ function sidebarNav() {
     const resetDemoDataButton = document.querySelector("#reset-demo-data");
     resetDemoDataButton.addEventListener("click", function() {
         getTasks.all().splice(0, getTasks.all().length);
+        getProjects().splice(0, getProjects().length);
         createDummyData();
+        setVisibleTasks(getTasks.all(), "All Tasks");
+        renderProjectButtons();
         renderTasks();
     });
 }
