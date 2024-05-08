@@ -1,4 +1,5 @@
 import { format, compareAsc } from "date-fns";
+import { getProjects } from "./projects";
 
 export const createElement = (function() {
 
@@ -35,9 +36,9 @@ export const createElement = (function() {
         return label
     };
 
-    function inputText(nameAndIdText) {
+    function inputElement(type, nameAndIdText) {
         const input = document.createElement("input");
-        input.setAttribute("type", "text");
+        input.setAttribute("type", type);
         input.setAttribute("name", nameAndIdText);
         input.setAttribute("id", nameAndIdText);
     
@@ -65,7 +66,7 @@ export const createElement = (function() {
     function taskDisplay(task) {
         const taskContainer = document.createElement("div");
         taskContainer.classList.add("div-task");
-        task.project ? taskContainer.setAttribute("data-key", task.project.key) : null;
+        taskContainer.setAttribute("data-key", task.key);
 
         const priorityButton = document.createElement("span");
         priorityButton.classList.add("material-symbols-outlined", "md-18");
@@ -153,7 +154,7 @@ export const createElement = (function() {
             const label = inputLabel("projectName", "Name");
             inputDiv.appendChild(label);
 
-            const input = inputText("projectName");
+            const input = inputElement("text", "projectName");
             input.setAttribute("required", true);
             inputDiv.appendChild(input);
 
@@ -167,12 +168,92 @@ export const createElement = (function() {
             buttonsDiv.appendChild(saveButton);
 
         return form
-    }
+    };
+
+    function addTaskForm() {
+        const form = document.createElement("form");
+        form.setAttribute("id", "add-task-form");
+
+        const h2 = document.createElement("h2");
+        h2.textContent = "Add Task";
+        form.appendChild(h2);
+
+        const inputDiv = document.createElement("div");
+        form.appendChild(inputDiv);
+
+            const labelTitle = inputLabel("taskTitle", "Title");
+            inputDiv.appendChild(labelTitle);
+
+            const inputTitle = inputElement("text", "taskTitle");
+            inputTitle.setAttribute("required", true);
+            inputDiv.appendChild(inputTitle);
+
+            const labelNotes = inputLabel("taskNotes", "Notes");
+            inputDiv.appendChild(labelNotes);
+
+            const inputNotes = document.createElement("textarea");
+            inputNotes.setAttribute("name", "taskNotes");
+            inputNotes.setAttribute("id", "taskNotes");
+            inputNotes.setAttribute("rows", "4");
+            inputDiv.appendChild(inputNotes);
+
+            const labelDueDate = inputLabel("taskDueDate", "Due Date");
+            inputDiv.appendChild(labelDueDate);
+
+            const inputDueDate = inputElement("date", "taskDueDate");
+            inputDueDate.setAttribute("required", true);
+            inputDiv.appendChild(inputDueDate);
+
+            const labelPriority = inputLabel("taskPriority", "Priority");
+            inputDiv.appendChild(labelPriority);
+
+            const inputPriority = document.createElement("select");
+            inputPriority.setAttribute("name", "taskPriority");
+            inputPriority.setAttribute("id", "taskPriority");
+            const priorityValues = ["", "Low", "Medium", "High"];
+            for (let i = 0; i < priorityValues.length; i++) {
+                const value = document.createElement("option");
+                value.setAttribute("value", priorityValues[i]);
+                value.textContent = priorityValues[i];
+                inputPriority.appendChild(value);
+            }
+            inputDiv.appendChild(inputPriority);
+
+            const labelProject = inputLabel("taskProject", "Project");
+            inputDiv.appendChild(labelProject);
+
+            const inputProject = document.createElement("select");
+            inputProject.setAttribute("name", "taskProject");
+            inputProject.setAttribute("id", "taskProject");
+            
+            const blankOption = document.createElement("option");
+            inputProject.appendChild(blankOption);
+            const projectValues = getProjects();
+            for (let i = 0; i < projectValues.length; i++) {
+                const value = document.createElement("option");
+                value.setAttribute("value", projectValues[i].key);
+                value.textContent = projectValues[i].name;
+                inputProject.appendChild(value);
+            }
+            inputDiv.appendChild(inputProject);
+
+        const buttonsDiv = document.createElement("div");
+        form.appendChild(buttonsDiv);
+
+            const cancelButton = formCancelButton();
+            buttonsDiv.appendChild(cancelButton);
+
+            const saveButton = formSaveButton();
+            buttonsDiv.appendChild(saveButton);
+
+        return form
+    };
 
     return {
         text,
         projectButton,
         taskDisplay,
-        addProjectForm
+        addProjectForm,
+        addTaskForm
     };    
 })();

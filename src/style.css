@@ -328,6 +328,7 @@ form > div:last-child button {
 }
 
 input {
+    font-family: Arial, Helvetica, sans-serif;
     padding: 8px;
     border-radius: 8px;
     border: 1px solid lightgrey;
@@ -358,4 +359,21 @@ input {
 .btn-grey:hover {
     background-color: var(--darkgrey);
     cursor: pointer;
+}
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    resize: none;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+    min-width: 300px;
+}
+
+select {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+    min-width: 300px;
 }

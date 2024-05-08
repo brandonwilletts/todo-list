@@ -72,12 +72,11 @@ function renderTasks() {
 
     function addEventListenersToPriorityButtons() {
         const priorityButtons = document.querySelectorAll(".btn-priority");
-        const taskTitle = document.querySelectorAll("h3");
 
         for (let i = 0; i < priorityButtons.length; i++) {
             priorityButtons[i].addEventListener("click", function(){
-                const projectKey = priorityButtons[i].parentNode.dataset.key;
-                const task = getTasks.all().find(item => item.project.key == projectKey);
+                const taskKey = priorityButtons[i].parentNode.dataset.key;
+                const task = getTasks.all().find(item => item.key == taskKey);
                 if(!task.complete) {
                     task.complete = true;
                     renderTasks();
@@ -103,32 +102,61 @@ function renderTasks() {
     addEventListenersToPriorityButtons();
 };
 
-function sidebarNav() {
+function renderAddProjectFormModal() {
     const dialog = document.querySelector("dialog");
+
+    const form = createElement.addProjectForm();
+    dialog.textContent = "";
+    dialog.appendChild(form);
     
-    const addProjectButton = document.querySelector("#add-project");
-    addProjectButton.addEventListener("click", function() {
-        const form = createElement.addProjectForm();
-        dialog.textContent = "";
-        dialog.appendChild(form);
-        
-        const cancelButton = document.querySelector("#cancel");
-        cancelButton.addEventListener("click", () => dialog.close());
+    const cancelButton = document.querySelector("#cancel");
+    cancelButton.addEventListener("click", () => dialog.close());
 
-        const addProjectForm = document.querySelector("#add-project-form");
-        addProjectForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const newProject = createProject(projectName.value);
-            renderProjectButtons();
-            dialog.close();
-        })
-
-        dialog.showModal();
+    const addProjectForm = document.querySelector("#add-project-form");
+    addProjectForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const newProject = createProject(projectName.value);
+        setVisibleTasks(getTasks.filterByProject(newProject), `${newProject.name}`);
+        renderTasks();
+        renderProjectButtons();
+        dialog.close();
     });
 
-    const addTaskButton = document.querySelector("#add-task");
-    addTaskButton.addEventListener("click", function() {
-        dialog.showModal();
+    dialog.showModal();
+};
+
+function renderAddTaskFormModal() {
+    const dialog = document.querySelector("dialog");
+
+    const form = createElement.addTaskForm();
+    dialog.textContent = "";
+    dialog.appendChild(form);
+    
+    const cancelButton = document.querySelector("#cancel");
+    cancelButton.addEventListener("click", () => dialog.close());
+
+    const addProjectForm = document.querySelector("#add-task-form");
+    addProjectForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const newTask = createTask(taskTitle.value, taskNotes.value, new Date(taskDueDate.value), taskPriority.value, taskProject.value);
+        newTask.project ? setVisibleTasks(getTasks.filterByProject(newTask.project), `${newTask.project.name}`) : null;
+        renderTasks();
+        dialog.close();
+    });
+
+    dialog.showModal();
+};
+
+function sidebarNav() {
+  
+    const addProject = document.querySelector("#add-project");
+    addProject.addEventListener("click", function() {
+        renderAddProjectFormModal();
+    });
+
+    const addTask = document.querySelector("#add-task");
+    addTask.addEventListener("click", function() {
+        renderAddTaskFormModal();
     });
     
     const allTasksButton = document.querySelector("#all-tasks");

@@ -12,8 +12,7 @@ export function createDummyData() {
         "Submit to both Bobs",
         new Date(),
         "High",
-        projectWork,
-        true
+        projectWork.key,
     );
 
     const taskTwo = createTask(
@@ -21,22 +20,21 @@ export function createDummyData() {
         "Make sure to review Chapters 4 and 5",
         new Date(2024, 12, 31),
         "Medium",
-        projectSchool
+        projectSchool.key
     );
     const taskThree = createTask(
         "Buy groceries",
         "Milk, bread, cheese, eggs",
         new Date(2024, 3, 15),
         "Low",
-        projectPersonal
+        projectPersonal.key
     );
     const taskFour = createTask(
         "Get car serviced",
         "Fairview Auto",
         new Date(),
         "Medium",
-        projectOther,
-        true
+        projectOther.key,
     );
     const taskFive = createTask(
         "See if Inception is playing",
