@@ -164,7 +164,19 @@ body {
 }
 
 .sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     font-size: 8pt;
+}
+
+#reset-demo-data {
+    color: var(--red);
+}
+
+#reset-demo-data:hover {
+    cursor: pointer;
+    font-weight: bold;
 }
 
 /* Main */
@@ -185,10 +197,39 @@ body {
 
 .div-task {
     display: grid;
-    grid-template-columns: 20px 1fr;
+    grid-template-columns: 20px 1fr auto;
     padding: 24px 0;
     gap: 16px;
     border-top: 1px solid var(--light-grey);
+}
+
+.div-task:hover .btn-edit-task,
+.div-task:hover .btn-delete-task {
+    display: inline-block;
+}
+
+.btn-edit-task,
+.btn-delete-task {
+    display: none;
+}
+
+.btn-edit-task {
+    color: grey;
+    margin-right: 16px;
+}
+
+.btn-delete-task {
+    color: var(--red);
+}
+
+.btn-edit-task:hover {
+    cursor: pointer;
+    color: var(--icon);
+}
+
+.btn-delete-task:hover {
+    cursor: pointer;
+    color: var(--darkred);
 }
 
 .div-task p {

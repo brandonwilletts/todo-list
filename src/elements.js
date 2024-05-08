@@ -1,5 +1,6 @@
 import { format, compareAsc } from "date-fns";
 import { getProjects } from "./projects";
+import { de } from "date-fns/locale";
 
 export const createElement = (function() {
 
@@ -71,6 +72,7 @@ export const createElement = (function() {
         const priorityButton = document.createElement("span");
         priorityButton.classList.add("material-symbols-outlined", "md-18");
         priorityButton.classList.add("btn-priority");
+
         if (task.complete === true) {
             priorityButton.textContent = "close";
         } else {
@@ -135,7 +137,22 @@ export const createElement = (function() {
             projectLink.setAttribute("data-key", task.project.key);
             projectLink.textContent = task.project.name;
             span.appendChild(projectLink);
-        }
+        };
+
+        const editDiv = document.createElement("div");
+        taskContainer.appendChild(editDiv);
+        
+            const editButton = document.createElement("span");
+            editButton.classList.add("material-symbols-outlined", "md-18", "btn-edit-task");
+            editButton.setAttribute("data-key", task.key);
+            editButton.textContent = "edit_square";
+            editDiv.appendChild(editButton);
+
+            const deleteButton = document.createElement("span");
+            deleteButton.classList.add("material-symbols-outlined", "md-18", "btn-delete-task");
+            deleteButton.setAttribute("data-key", task.key);
+            deleteButton.textContent = "delete";
+            editDiv.appendChild(deleteButton);
 
         return taskContainer
     }
