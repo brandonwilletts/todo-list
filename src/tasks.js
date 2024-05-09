@@ -2,6 +2,9 @@ import { createElement } from "./elements";
 import { format, compareAsc } from "date-fns";
 import { getProjects } from "./projects";
 
+let tasks = [];
+let taskId = 0;
+
 class Task {
     constructor(title, notes, dueDate, priority, projectKey) {
         this.title = title;
@@ -10,15 +13,14 @@ class Task {
         this.priority = priority;
         this.project = getProjects().find(project => project.key == projectKey);
         this.complete = false;
-        this.key = Math.floor(Math.random() * 1000000);
+        this.key = taskId;
     }
 }
-
-let tasks = [];
 
 export function createTask(title, notes, dueDate, priority, projectKey) {
     const task = new Task (title, notes, dueDate, priority, projectKey);
     tasks.push(task);
+    taskId++;
     return task
 }
 

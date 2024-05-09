@@ -1,17 +1,19 @@
 import { createElement } from "./elements";
 
+let projects = [];
+let projectId = 0;
+
 class Project {
     constructor(name) {
         this.name = name;
-        this.key = Math.floor(Math.random() * 1000000);
+        this.key = projectId;
     }
 }
-
-let projects = [];
 
 export function createProject(name) {
     const project = new Project(name);
     projects.push(project);
+    projectId++;
     return project
 }
 

@@ -14,6 +14,8 @@ function initializePage() {
     renderTasks();
     renderProjectButtons();
     sidebarNav();
+
+    console.table(getTasks.all());
 };
 
 function setVisibleTasks(tasksArray, headingString) {
