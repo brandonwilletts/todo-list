@@ -1,15 +1,17 @@
 import "./style.css";
 import { format, compareAsc } from "date-fns";
-import { clearTasksArray, createTask, getTasks, getTasksByProject, getTasksOverdue, getTasksToday, removeTask } from "./tasks";
+import { createTask, getTaskId, getTasks, getTasksByProject, getTasksOverdue, getTasksToday, removeTask } from "./tasks";
 import { createDummyData } from "./dummydata";
-import { clearProjects, createProject, getProjects, removeProject } from "./projects";
+import { createProject, getProjects, removeProject, getProjectId } from "./projects";
 import { createElement } from "./elements";
 
 let visibleTasks = []; 
 let heading = "";
 
 function initializePage() {
-    createDummyData();
+    if (getProjectId() == 0 && getTaskId() == 0) {
+        createDummyData();
+    }
     setVisibleTasks(getTasks(), "All Tasks");
     renderTasks();
     renderProjectButtons();
@@ -163,7 +165,7 @@ function renderAddProjectFormModal() {
     addProjectForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const newProject = createProject(projectName.value);
-        setVisibleTasks(getTaskByProject(newProject), `${newProject.name}`);
+        setVisibleTasks(getTasksByProject(newProject.key), `${newProject.name}`);
         renderTasks();
         renderProjectButtons();
         dialog.close();
@@ -234,8 +236,7 @@ function sidebarNav() {
 
     const resetDemoDataButton = document.querySelector("#reset-demo-data");
     resetDemoDataButton.addEventListener("click", function() {
-        getTasks().all().splice(0, getTasks().length);
-        clearProjects();
+        localStorage.clear();
         createDummyData();
         setVisibleTasks(getTasks(), "All Tasks");
         renderProjectButtons();
