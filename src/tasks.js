@@ -2,7 +2,6 @@ import { createElement } from "./elements";
 import { format, compareAsc } from "date-fns";
 import { getProjects } from "./projects";
 
-let tasks = [];
 let taskId = 0;
 
 class Task {
@@ -15,22 +14,50 @@ class Task {
         this.complete = false;
         this.key = taskId;
     }
-}
+};
 
 export function createTask(title, notes, dueDate, priority, projectKey) {
     const task = new Task (title, notes, dueDate, priority, projectKey);
-    tasks.push(task);
+    localStorage.setItem(`task-${taskId}`, JSON.stringify(task));
     taskId++;
     return task
-}
+};
 
-export const getTasks = (function() {
+export function getTasks() {
+    const tasks = [];
+    for (let i = 0; i <= taskId; i++) {
+        localStorage.getItem(`task-${i}`) ? tasks.push(JSON.parse(localStorage.getItem(`task-${i}`))) : null;
+    }
+    return tasks
+};
+
+export function getTasksToday() {
     const todaysDateFormatted = format(new Date(), "yyyy-MM-dd");
+    let tasks = getTasks();
+    tasks = tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") == todaysDateFormatted);
+    return tasks
+};
 
-    const all = () => tasks;
-    const filterByToday = () => tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") == todaysDateFormatted);
-    const filterByOverdue = () => tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") < todaysDateFormatted);
-    const filterByProject = (project) => tasks.filter(task => task.project === project);
+export function getTasksOverdue() {
+    const todaysDateFormatted = format(new Date(), "yyyy-MM-dd");
+    let tasks = getTasks();
+    tasks = tasks.filter(task => format(task.dueDate, "yyyy-MM-dd") < todaysDateFormatted);
+    return tasks
+};
 
-    return { all, filterByToday, filterByOverdue, filterByProject };
-})();
+export function getTasksByProject(projectKey) {
+    let tasks = getTasks();
+    tasks = tasks.filter(task => task.project && task.project.key == projectKey);
+    return tasks
+};
+
+export function clearTasks() {
+    let tasks = getTasks();
+    for (let i = 0; i < tasks.length; i++) {
+        localStorage.removeItem(`task-${tasks[i].key}`);
+    };
+};
+
+export function removeTask(taskKey) {
+    localStorage.removeItem(`task-${taskKey}`);
+}

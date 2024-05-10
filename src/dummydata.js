@@ -1,7 +1,7 @@
-import { createProject } from "./projects";
+import { clearProjects, createProject } from "./projects";
 import { createTask } from "./tasks";
 
-export function createDummyData() {
+export function createDummyData() { 
     const projectWork = createProject("Work");
     const projectSchool = createProject("School");
     const projectPersonal = createProject("Personal");

@@ -1,8 +1,8 @@
 import "./style.css";
 import { format, compareAsc } from "date-fns";
-import { clearTasksArray, createTask, getTasks } from "./tasks";
+import { clearTasksArray, createTask, getTasks, getTasksByProject, getTasksOverdue, getTasksToday, removeTask } from "./tasks";
 import { createDummyData } from "./dummydata";
-import { clearProjects, createProject, getProjects } from "./projects";
+import { clearProjects, createProject, getProjects, removeProject } from "./projects";
 import { createElement } from "./elements";
 
 let visibleTasks = []; 
@@ -10,7 +10,7 @@ let heading = "";
 
 function initializePage() {
     createDummyData();
-    setVisibleTasks(getTasks.all(), "All Tasks");
+    setVisibleTasks(getTasks(), "All Tasks");
     renderTasks();
     renderProjectButtons();
     sidebarNav();
@@ -33,8 +33,10 @@ function renderProjectButtons() {
         
         for (let i = 0; i < projectButtons.length; i++) {
             const project = getProjects().find(item => item.key == projectButtons[i].dataset.key);
+            const projectKey = projectButtons[i].dataset.key;
+            
             projectButtons[i].addEventListener("click", function() {
-                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
+                setVisibleTasks(getTasksByProject(projectKey), `${project.name}`);
                 renderTasks();
             });
         };
@@ -45,15 +47,13 @@ function renderProjectButtons() {
         
         for (let i = 0; i < deleteProjectButtons.length; i++) {
             const projectKey = deleteProjectButtons[i].parentNode.dataset.key;
-            const project = getProjects().find(item => item.key == projectKey);
-            const tasks = getTasks.filterByProject(project);
+            const tasks = getTasksByProject(projectKey);
 
             deleteProjectButtons[i].addEventListener("click", function() {
-                const projectIndex = getProjects().indexOf(project);
-                getProjects().splice(projectIndex, 1);
+                removeProject(projectKey);
                 for(let i = 0; i < tasks.length; i++) {
-                    const index = getTasks.all().indexOf(tasks[i]);
-                    getTasks.all().splice(index, 1);
+                    removeTask(tasks[i].key);
+                    renderTasks();
                 }
                 renderProjectButtons();
             });
@@ -83,10 +83,10 @@ function renderTasks() {
         const deleteTaskButtons = document.querySelectorAll(".btn-delete-task");
         for (let i = 0; i < deleteTaskButtons.length; i++) {
             const taskKey = deleteTaskButtons[i].dataset.key;
-            const task = getTasks.all().find(item => item.key == taskKey);
+            const task = getTasks().find(item => item.key == taskKey);
             deleteTaskButtons[i].addEventListener("click", function() {
-                const index = getTasks.all().indexOf(task);
-                getTasks.all().splice(index, 1);
+                removeTask(taskKey);
+                visibleTasks = visibleTasks.filter(item => item.key != taskKey);
                 renderTasks();
             });
         };
@@ -96,7 +96,7 @@ function renderTasks() {
         const editTaskButtons = document.querySelectorAll(".btn-edit-task");
         for (let i = 0; i < editTaskButtons.length; i++) {
             const taskKey = editTaskButtons[i].dataset.key;
-            const task = getTasks.all().find(item => item.key == taskKey);
+            const task = getTasks().find(item => item.key == taskKey);
             editTaskButtons[i].addEventListener("click", function() {
                 renderAddTaskFormModal(task);
             });
@@ -109,7 +109,7 @@ function renderTasks() {
         for (let i = 0; i < projectLinks.length; i++) {
             const project = getProjects().find(item => item.key == projectLinks[i].dataset.key);
             projectLinks[i].addEventListener("click", function() {
-                setVisibleTasks(getTasks.filterByProject(project), `${project.name}`);
+                setVisibleTasks(getTasksByProject(projectLinks[i].dataset.key), `${project.name}`);
                 renderTasks();
             });
         };
@@ -121,7 +121,7 @@ function renderTasks() {
         for (let i = 0; i < priorityButtons.length; i++) {
             priorityButtons[i].addEventListener("click", function(){
                 const taskKey = priorityButtons[i].parentNode.dataset.key;
-                const task = getTasks.all().find(item => item.key == taskKey);
+                const task = getTasks().find(item => item.key == taskKey);
                 if(!task.complete) {
                     task.complete = true;
                     renderTasks();
@@ -163,7 +163,7 @@ function renderAddProjectFormModal() {
     addProjectForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const newProject = createProject(projectName.value);
-        setVisibleTasks(getTasks.filterByProject(newProject), `${newProject.name}`);
+        setVisibleTasks(getTaskByProject(newProject), `${newProject.name}`);
         renderTasks();
         renderProjectButtons();
         dialog.close();
@@ -194,7 +194,7 @@ function renderAddTaskFormModal(taskToEdit) {
             console.table(taskToEdit);
         } else {
             const newTask = createTask(taskTitle.value, taskNotes.value, taskDueDate.value, taskPriority.value, taskProject.value);
-            newTask.project ? setVisibleTasks(getTasks.filterByProject(newTask.project), `${newTask.project.name}`) : null;
+            newTask.project ? setVisibleTasks(getTasks().filterByProject(newTask.project), `${newTask.project.name}`) : null;
         }
         renderTasks();
         dialog.close();
@@ -216,28 +216,28 @@ function sidebarNav() {
     
     const allTasksButton = document.querySelector("#all-tasks");
     allTasksButton.addEventListener("click", function() {
-        setVisibleTasks(getTasks.all(), "All Tasks");
+        setVisibleTasks(getTasks(), "All Tasks");
         renderTasks();
     });
 
     const todayButton = document.querySelector("#today");
     todayButton.addEventListener("click", function() {
-        setVisibleTasks(getTasks.filterByToday(), "Today");
+        setVisibleTasks(getTasksToday(), "Today");
         renderTasks();
     });
 
     const overdueButton = document.querySelector("#overdue");
     overdueButton.addEventListener("click", function() {
-        setVisibleTasks(getTasks.filterByOverdue(), "Overdue");
+        setVisibleTasks(getTasksOverdue(), "Overdue");
         renderTasks();
     });
 
     const resetDemoDataButton = document.querySelector("#reset-demo-data");
     resetDemoDataButton.addEventListener("click", function() {
-        getTasks.all().splice(0, getTasks.all().length);
+        getTasks().all().splice(0, getTasks().length);
         clearProjects();
         createDummyData();
-        setVisibleTasks(getTasks.all(), "All Tasks");
+        setVisibleTasks(getTasks(), "All Tasks");
         renderProjectButtons();
         renderTasks();
     });

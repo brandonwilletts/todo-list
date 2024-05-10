@@ -30,3 +30,7 @@ export function clearProjects() {
         localStorage.removeItem(`project-${projects[i].key}`);
     };
 };
+
+export function removeProject(projectKey) {
+    localStorage.removeItem(`project-${projectKey}`);
+}
