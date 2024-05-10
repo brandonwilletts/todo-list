@@ -1,6 +1,5 @@
 import { createElement } from "./elements";
 
-let projects = [];
 let projectId = 0;
 
 class Project {
@@ -12,11 +11,22 @@ class Project {
 
 export function createProject(name) {
     const project = new Project(name);
-    projects.push(project);
+    localStorage.setItem(`project-${projectId}`, JSON.stringify(project));
     projectId++;
     return project
 }
 
 export function getProjects() {
+    let projects = [];
+    for (let i = 0; i <= projectId; i++) {
+        localStorage.getItem(`project-${i}`) ? projects.push(JSON.parse(localStorage.getItem(`project-${i}`))) : null;
+    }
     return projects
 }
+
+export function clearProjects() {
+    let projects = getProjects();
+    for (let i = 0; i < projects.length; i++) {
+        localStorage.removeItem(`project-${projects[i].key}`);
+    };
+};

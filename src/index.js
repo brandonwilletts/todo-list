@@ -2,7 +2,7 @@ import "./style.css";
 import { format, compareAsc } from "date-fns";
 import { clearTasksArray, createTask, getTasks } from "./tasks";
 import { createDummyData } from "./dummydata";
-import { createProject, getProjects } from "./projects";
+import { clearProjects, createProject, getProjects } from "./projects";
 import { createElement } from "./elements";
 
 let visibleTasks = []; 
@@ -14,8 +14,6 @@ function initializePage() {
     renderTasks();
     renderProjectButtons();
     sidebarNav();
-
-    console.table(getTasks.all());
 };
 
 function setVisibleTasks(tasksArray, headingString) {
@@ -237,7 +235,7 @@ function sidebarNav() {
     const resetDemoDataButton = document.querySelector("#reset-demo-data");
     resetDemoDataButton.addEventListener("click", function() {
         getTasks.all().splice(0, getTasks.all().length);
-        getProjects().splice(0, getProjects().length);
+        clearProjects();
         createDummyData();
         setVisibleTasks(getTasks.all(), "All Tasks");
         renderProjectButtons();
