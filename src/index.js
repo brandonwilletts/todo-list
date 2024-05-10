@@ -196,7 +196,7 @@ function renderAddTaskFormModal(taskToEdit) {
             console.table(taskToEdit);
         } else {
             const newTask = createTask(taskTitle.value, taskNotes.value, taskDueDate.value, taskPriority.value, taskProject.value);
-            newTask.project ? setVisibleTasks(getTasks().filterByProject(newTask.project), `${newTask.project.name}`) : null;
+            newTask.project ? setVisibleTasks(getTasksByProject(newTask.project.key), `${newTask.project.name}`) : null;
         }
         renderTasks();
         dialog.close();
