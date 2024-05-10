@@ -1,6 +1,6 @@
 import "./style.css";
 import { format, compareAsc } from "date-fns";
-import { createTask, getTaskId, getTasks, getTasksByProject, getTasksOverdue, getTasksToday, removeTask } from "./tasks";
+import { createTask, getTaskId, getTasks, getTasksByProject, getTasksOverdue, getTasksToday, removeTask, updateTask } from "./tasks";
 import { createDummyData } from "./dummydata";
 import { createProject, getProjects, removeProject, getProjectId } from "./projects";
 import { createElement } from "./elements";
@@ -124,13 +124,19 @@ function renderTasks() {
             priorityButtons[i].addEventListener("click", function(){
                 const taskKey = priorityButtons[i].parentNode.dataset.key;
                 const task = getTasks().find(item => item.key == taskKey);
+                const taskIndex = visibleTasks.findIndex(item => item.key == taskKey);
+                let taskProjectKey = "";
+                task.project ? taskProjectKey = task.project.key : null;
                 if(!task.complete) {
-                    task.complete = true;
-                    renderTasks();
+                    removeTask(task.key);
+                    const newTask = updateTask(task.title, task.notes, task.dueDate, task.priority, taskProjectKey, true, task.key);
+                    visibleTasks.splice(taskIndex, 1, newTask);
                 } else {
-                    task.complete = false;
-                    renderTasks();
+                    removeTask(task.key);
+                    const newTask = updateTask(task.title, task.notes, task.dueDate, task.priority, taskProjectKey, false, task.key);
+                    visibleTasks.splice(taskIndex, 1, newTask);
                 }
+                renderTasks();
             });
         };
     };
@@ -188,14 +194,13 @@ function renderAddTaskFormModal(taskToEdit) {
     addProjectForm.addEventListener("submit", (event) => {
         event.preventDefault();
         if(taskToEdit) {
-            taskToEdit.title = taskTitle.value;
-            taskToEdit.notes = taskNotes.value;
-            taskToEdit.dueDate = taskDueDate.value;
-            taskToEdit.priority = taskPriority.value;
-            taskToEdit.project = getProjects().find(project => project.key == taskProject.value);
-            console.table(taskToEdit);
+            const taskIndex = visibleTasks.findIndex(item => item.key == taskToEdit.key);
+            removeTask(taskToEdit.key);
+            const newTask = updateTask(taskTitle.value, taskNotes.value, taskDueDate.value, taskPriority.value, taskProject.value, taskToEdit.complete, taskToEdit.key);
+            visibleTasks.splice(taskIndex, 1, newTask);
         } else {
             const newTask = createTask(taskTitle.value, taskNotes.value, taskDueDate.value, taskPriority.value, taskProject.value);
+            visibleTasks.push(newTask);
             newTask.project ? setVisibleTasks(getTasksByProject(newTask.project.key), `${newTask.project.name}`) : null;
         }
         renderTasks();

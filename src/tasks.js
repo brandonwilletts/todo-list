@@ -15,21 +15,27 @@ function incrementTaskId() {
 };
 
 class Task {
-    constructor(title, notes, dueDate, priority, projectKey) {
+    constructor(title, notes, dueDate, priority, projectKey, complete, key) {
         this.title = title;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = getProjects().find(project => project.key == projectKey);
-        this.complete = false;
-        this.key = getTaskId();
+        this.complete = complete;
+        this.key = key;
     }
 };
 
-export function createTask(title, notes, dueDate, priority, projectKey) {
-    const task = new Task (title, notes, dueDate, priority, projectKey);
+export function createTask(title, notes, dueDate, priority, projectKey, complete = false, key = getTaskId()) {
+    const task = new Task (title, notes, dueDate, priority, projectKey, complete, key);
     localStorage.setItem(`task-${getTaskId()}`, JSON.stringify(task));
     incrementTaskId();
+    return task
+};
+
+export function updateTask(title, notes, dueDate, priority, projectKey, complete = false, key = getTaskId()) {
+    const task = new Task (title, notes, dueDate, priority, projectKey, complete, key);
+    localStorage.setItem(`task-${key}`, JSON.stringify(task));
     return task
 };
 

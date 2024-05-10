@@ -274,7 +274,7 @@ export const createElement = (function() {
             inputNotes.value = taskToEdit.notes;
             inputDueDate.value = format(taskToEdit.dueDate, "yyyy-MM-dd");
             inputPriority.value = taskToEdit.priority;
-            inputProject.value = taskToEdit.project.key;
+            taskToEdit.project ? inputProject.value = taskToEdit.project.key : null;            
         }
 
         return form
